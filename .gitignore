@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+backend/venv/
+*/node_modules/
+*/venv/
+
+# Build outputs
+dist/
+build/
+*.egg-info/
+
+# Python cache & artifacts
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.db
+*.sqlite3
+backend/uploads/*
+!backend/uploads/.gitkeep
+
+# Environment & credentials
+.env
+.env.local
+.DS_Store
+Thumbs.db
+
+# IDE & Editor
+.vscode/
+.idea/
+*.swp
+*.swo
