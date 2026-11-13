@@ -22,7 +22,7 @@ export const LoginPage: React.FC = () => {
       login(res.access_token, res.user);
       navigate('/dashboard');
     } catch (err: any) {
-      setError(err.response?.data?.detail || 'Invalid email or password. Please verify your credentials or register a new account.');
+      setError(err.response?.data?.detail || err.message || 'Invalid email or password. Please verify your credentials or register a new account.');
     } finally {
       setLoading(false);
     }

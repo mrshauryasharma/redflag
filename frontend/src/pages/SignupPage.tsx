@@ -28,7 +28,7 @@ export const SignupPage: React.FC = () => {
       login(res.access_token, res.user);
       navigate('/dashboard');
     } catch (err: any) {
-      setError(err.response?.data?.detail || 'Registration failed. Please try a different email.');
+      setError(err.response?.data?.detail || err.message || 'Registration failed. Please try a different email.');
     } finally {
       setLoading(false);
     }

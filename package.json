@@ -1,0 +1,11 @@
+{
+  "name": "redflag",
+  "version": "1.0.0",
+  "private": true,
+  "description": "RED FLAG - AI-Powered Cybersecurity & Digital Fraud Prevention Platform",
+  "scripts": {
+    "build": "cd frontend && npm install && npm run build",
+    "dev": "cd frontend && npm run dev",
+    "start": "cd frontend && npm run preview"
+  }
+}

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
 interface User {
   id: number;
@@ -20,13 +20,30 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  // Purge any legacy demo tokens from previous builds
+  try {
+    localStorage.removeItem('scam_shield_token');
+    localStorage.removeItem('scam_shield_user');
+    localStorage.removeItem('demo_active_token');
+  } catch {
+    // Ignore storage errors
+  }
+
   const [user, setUser] = useState<User | null>(() => {
-    const saved = localStorage.getItem('redflag_user');
-    return saved ? JSON.parse(saved) : null;
+    try {
+      const saved = localStorage.getItem('redflag_user');
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
   });
 
   const [token, setToken] = useState<string | null>(() => {
-    return localStorage.getItem('redflag_token') || null;
+    try {
+      return localStorage.getItem('redflag_token') || null;
+    } catch {
+      return null;
+    }
   });
 
   const [lang, setLang] = useState<'en' | 'hi'>('en');
@@ -34,15 +51,23 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const login = (newToken: string, newUser: User) => {
     setToken(newToken);
     setUser(newUser);
-    localStorage.setItem('redflag_token', newToken);
-    localStorage.setItem('redflag_user', JSON.stringify(newUser));
+    try {
+      localStorage.setItem('redflag_token', newToken);
+      localStorage.setItem('redflag_user', JSON.stringify(newUser));
+    } catch (err) {
+      console.error('Failed to store auth tokens in localStorage', err);
+    }
   };
 
   const logout = () => {
     setToken(null);
     setUser(null);
-    localStorage.removeItem('redflag_token');
-    localStorage.removeItem('redflag_user');
+    try {
+      localStorage.removeItem('redflag_token');
+      localStorage.removeItem('redflag_user');
+    } catch (err) {
+      console.error('Failed to clear auth tokens', err);
+    }
   };
 
   return (
@@ -54,7 +79,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setLang,
         login,
         logout,
-        isAuthenticated: !!token,
+        isAuthenticated: !!token && !!user,
       }}
     >
       {children}
